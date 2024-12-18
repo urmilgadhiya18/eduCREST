@@ -1,24 +1,38 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Trophy, Medal, Award, Search } from 'lucide-react'
+import axios from 'axios'
 
-const leaderboardData = [
-  { rank: 1, name: 'John Doe', score: 9850, avatar: 'https://res.cloudinary.com/drx7mkztw/image/upload/v1734281885/avtar_rpmw4v.png' },
-  { rank: 2, name: 'Jane Smith', score: 9720, avatar: '/placeholder.svg?height=40&width=40' },
-  { rank: 3, name: 'Bob Johnson', score: 9600, avatar: '/placeholder.svg?height=40&width=40' },
-  { rank: 4, name: 'Alice Williams', score: 9450, avatar: '/placeholder.svg?height=40&width=40' },
-  { rank: 5, name: 'Charlie Brown', score: 9300, avatar: '/placeholder.svg?height=40&width=40' },
-  { rank: 6, name: 'Diana Davis', score: 9150, avatar: '/placeholder.svg?height=40&width=40' },
-  { rank: 7, name: 'Ethan Wilson', score: 9000, avatar: '/placeholder.svg?height=40&width=40' },
-  { rank: 8, name: 'Fiona Taylor', score: 8850, avatar: '/placeholder.svg?height=40&width=40' },
-  { rank: 9, name: 'George Miller', score: 8700, avatar: '/placeholder.svg?height=40&width=40' },
-  { rank: 10, name: 'Hannah Clark', score: 8550, avatar: '/placeholder.svg?height=40&width=40' },
-]
+// const leaderboardData = [
+//   { rank: 1, name: 'John Doe', score: 9850, avatar: 'https://res.cloudinary.com/drx7mkztw/image/upload/v1734281885/avtar_rpmw4v.png' },
+//   { rank: 2, name: 'Jane Smith', score: 9720, avatar: '/placeholder.svg?height=40&width=40' },
+//   { rank: 3, name: 'Bob Johnson', score: 9600, avatar: '/placeholder.svg?height=40&width=40' },
+//   { rank: 4, name: 'Alice Williams', score: 9450, avatar: '/placeholder.svg?height=40&width=40' },
+//   { rank: 5, name: 'Charlie Brown', score: 9300, avatar: '/placeholder.svg?height=40&width=40' },
+//   { rank: 6, name: 'Diana Davis', score: 9150, avatar: '/placeholder.svg?height=40&width=40' },
+//   { rank: 7, name: 'Ethan Wilson', score: 9000, avatar: '/placeholder.svg?height=40&width=40' },
+//   { rank: 8, name: 'Fiona Taylor', score: 8850, avatar: '/placeholder.svg?height=40&width=40' },
+//   { rank: 9, name: 'George Miller', score: 8700, avatar: '/placeholder.svg?height=40&width=40' },
+//   { rank: 10, name: 'Hannah Clark', score: 8550, avatar: '/placeholder.svg?height=40&width=40' },
+// ]
 
 export default function Leaderboard() {
   const [searchTerm, setSearchTerm] = useState('')
+  const [leaderboardData, setLeaderboardData] = useState([])
+
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
+        const response = await axios.get('/api/leaderboard')
+        setLeaderboardData(response.data)
+      } catch (error) {
+        console.error('Error fetching leaderboard:', error.message)
+      }
+    }
+    fetchLeaderboard()
+  }, [])
 
   const filteredData = leaderboardData.filter(user =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -43,7 +57,7 @@ export default function Leaderboard() {
       <div className="hidden md:block overflow-hidden">
         <table className="w-full">
           <thead>
-            <tr className="bg-gray-100 dark:bg-gray-800">
+            <tr className="bg-gray-100 dark:bg-gray-900">
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Rank</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">User</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Score</th>
@@ -53,7 +67,7 @@ export default function Leaderboard() {
             {filteredData.map((user, index) => (
               <motion.tr
                 key={user.rank}
-                className="bg-white dark:bg-gray-900"
+                className="bg-white dark:bg-gray-800"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
@@ -94,7 +108,7 @@ export default function Leaderboard() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <RankIcon rank={user.rank} />
-                <img className="h-10 w-10 rounded-full" src={user.avatar} alt="" />
+                {/* <img className="h-10 w-10 rounded-full" src={user.avatar} alt="" /> */}
                 <div>
                   <div className="text-sm font-medium text-gray-900 dark:text-white">{user.name}</div>
                   <div className="text-sm text-gray-500 dark:text-gray-400">Score: {user.score}</div>

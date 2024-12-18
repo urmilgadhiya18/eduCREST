@@ -1,12 +1,51 @@
-'use client'
-
+'use client';
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import axios from 'axios'
-import { Book, Clock, Users, Plus, CalendarPlus } from 'lucide-react'
+import axios from 'axios';
+import { Book, Clock, Users, CalendarPlus } from 'lucide-react'
 
-export default function Dashboard() {
+// const courses = [
+//   {
+//     id: 1,
+//     title: 'Introduction to React',
+//     description: 'Learn the basics of React and build your first app',
+//     instructor: 'Jane Doe',
+//     duration: '4 weeks',
+//     students: 1234,
+//     image: '/webDev.jpg',
+//   },
+//   {
+//     id: 2,
+//     title: 'Advanced JavaScript Concepts',
+//     description: 'Deep dive into advanced JavaScript features and patterns',
+//     instructor: 'John Smith',
+//     duration: '6 weeks',
+//     students: 987,
+//     image: '/Cover.png',
+//   },
+//   {
+//     id: 3,
+//     title: 'CSS Mastery',
+//     description: 'Master CSS layouts, animations, and responsive design',
+//     instructor: 'Emily Chen',
+//     duration: '5 weeks',
+//     students: 1567,
+//     image: '/ds.jpg',
+//   },
+//   {
+//     id: 4,
+//     title: 'Node.js Backend Development',
+//     description: 'Build scalable backend applications with Node.js',
+//     instructor: 'Michael Johnson',
+//     duration: '8 weeks',
+//     students: 2345,
+//     image: '/Cover.png',
+//   },
+// ]
+
+export default function Mycourses() {
+
   const [courses, setCourses] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -14,32 +53,19 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get('/api/dashboard')
-        setCourses(response.data)
-        setIsLoading(false)
+        const auth = JSON.parse(localStorage.getItem('auth'));
+        const email = auth?.email;
+        const response = await axios.post('/api/mycourses', {email});        
+        setCourses(response.data.courses);
       } catch (err) {
-        setError(err.response?.data?.error || 'An error occurred while fetching courses')
-        setIsLoading(false)
+        setError(err.response?.data?.message || err.message);
+      } finally {
+        setIsLoading(false);
       }
-    }
+    };
 
-    fetchCourses()
-  }, [])
-
-  const handleSubmit = async (courseId) => {
-    try {
-      const auth = JSON.parse(localStorage.getItem('auth'));
-      const email = auth?.email;
-      const response = await axios.post('/api/enroll', {
-        email: email,
-        courseId: courseId
-      })
-      alert(response.data.message)
-    } catch (error) {
-      console.error('Error enrolling in course:', error)
-      alert('Failed to enroll in course.')
-    }
-  }
+    fetchCourses();
+  }, []);
 
   if (isLoading) {
     return (
@@ -59,8 +85,8 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="relative min-h-screen pb-16">
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Dashboard</h1>
+    <div className="space-y-6">
+      <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Courses</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {courses.map((course) => (
           <div key={course._id} className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:bg-gray-200 dark:hover:bg-gray-700">
@@ -86,37 +112,20 @@ export default function Dashboard() {
                 <Book className="w-4 h-4 mr-1" />
                 <span>{course.instructor}</span>
               </div>
-              <div className='flex justify-between flex-wrap gap-y-2'>
-                <Link
-                  href={`/dashboard/${course._id}`}
-                  className="block w-[46%] min-w-[110px] text-center border border-purple-600 text-purple-600 py-2 px-2 rounded-full hover:bg-purple-600 hover:text-white transition duration-300"
-                >
-                  View Details
-                </Link>
-                <button
-                  // href={`/dashboard/courses/${course._id}`}
-                  onClick={() => handleSubmit(course._id)}
-                  className="block w-[46%] min-w-[110px] text-center bg-purple-600 text-white py-2 px-2 rounded-full hover:bg-purple-700 transition duration-300"
-                >
-                  Enroll Course
-                </button>
-              </div>
+              <Link
+                href={`/dashboard/mycourses/${course._id}`}
+                className="block w-full text-center bg-purple-600 text-white py-2 px-4 rounded-full hover:bg-purple-700 transition duration-300"
+              >
+                View Course
+              </Link>
             </div>
           </div>
         ))}
       </div>
-      {/* <div className="fixed bottom-8 right-8">
-        <Link
-          href="/dashboard/courses/new"
-          className="flex items-center justify-center w-16 h-16 bg-green-500 text-white rounded-full shadow-lg hover:bg-green-600 transition duration-300"
-        >
-          <Plus className="w-8 h-8" />
-        </Link>
-      </div> */}
 
-      {/* <div className="fixed bottom-8 right-8">
+      <div className="fixed bottom-8 right-8">
         <Link
-          href="#"
+          href="/dashboard/addcourse"
           className="group relative flex items-center w-16 h-16 bg-green-500 text-white rounded-full shadow-lg overflow-hidden hover:w-48 transition-all duration-300"
         >
           <span
@@ -128,7 +137,7 @@ export default function Dashboard() {
             <CalendarPlus className="w-8 h-8" />
           </div>
         </Link>
-      </div> */}
+      </div>
 
     </div>
   )

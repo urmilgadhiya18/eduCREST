@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
 
 const videoSchema = new mongoose.Schema({
-  title: { type: String, required: true },
+  id: { type: String, required: true },
+  title: { type: String, required: true, trim: true },
   url: { type: String, required: true },
   transcript: { type: String },
-});
+},{ _id: false });
 
 const courseSchema = new mongoose.Schema({
   title: { type: String, required: true, trim: true },
@@ -14,9 +15,7 @@ const courseSchema = new mongoose.Schema({
   students: { type: Number, required: true, min: 0 },
   image: { type: String, required: true },
   videos: [videoSchema],
-},
-//  { timestamps: true }
-);
+});
 
 const Course = mongoose.models.Course || mongoose.model("Course", courseSchema);
 

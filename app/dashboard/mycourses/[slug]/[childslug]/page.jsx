@@ -89,8 +89,8 @@ export default function Quiz({params}) {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await axios.get(`/api/courses/${slug}/${videoId}`)
-        setQuestions(response.data)
+        const response = await axios.get(`/api/mycourses/${slug}/${videoId}`)        
+        setQuestions(response.data.quiz)
         setIsLoading(false)
       } catch (err) {
         setError(err.response?.data?.error || 'An error occurred while fetching the course')
@@ -118,8 +118,8 @@ export default function Quiz({params}) {
     )
   }
 
-  if (!course) {
-    return <div>Course not found</div>
+  if (!questions) {
+    return <div>Quiz not generated</div>
   }
 
   const handleAnswerSelect = (questionIndex, optionIndex) => {
@@ -129,8 +129,23 @@ export default function Quiz({params}) {
     }))
   }
 
-  const handleSubmit = () => {
+  // const handleSubmit = () => {
+  //   setShowResults(true)
+  // }
+  const handleSubmit = async () => {
+    const auth = JSON.parse(localStorage.getItem('auth'));
+    const email = auth?.email;
+    const calculatedScore = calculateScore()
     setShowResults(true)
+
+    try {
+      await axios.post('/api/updatescore', {
+        email: email,
+        score: calculatedScore
+      })
+    } catch (error) {
+      console.error('Failed to submit quiz score:', error)
+    }
   }
 
   const calculateScore = () => {

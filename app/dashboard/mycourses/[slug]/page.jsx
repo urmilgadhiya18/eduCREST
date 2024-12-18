@@ -188,7 +188,7 @@ export default function Course({params}) {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await axios.get(`/api/courses/${courseId}`)
+        const response = await axios.get(`/api/mycourses/${courseId}`)
         setCourse(response.data)
         setIsLoading(false)
       } catch (err) {
@@ -263,14 +263,14 @@ export default function Course({params}) {
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Course Content</h2>
           <ul className="space-y-2">
             {course.videos.map((video) => (
-              <li key={video._id}>
+              <li key={video.id}>
                 <button
                   onClick={() => {
                     setSelectedVideo(video)
                     setShowTranscript(false)
                   }}
                   className={`w-full text-left px-4 py-2 rounded-md transition duration-200 ${
-                    selectedVideo && selectedVideo._id === video._id
+                    selectedVideo && selectedVideo.id === video.id
                       ? 'bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300'
                       : 'hover:bg-gray-200 dark:hover:bg-gray-700'
                   }`}
@@ -289,7 +289,7 @@ export default function Course({params}) {
       {/* QUIZ BUTTON */}
       {selectedVideo &&
         <Link
-            href={`/dashboard/courses/${courseId}/${selectedVideo?._id}`}
+            href={`/dashboard/mycourses/${courseId}/${selectedVideo?.id}`}
             className="fixed bottom-5 right-5 flex items-end justify-end w-max rounded-full py-2 px-4 bg-green-600 text-white hover:bg-green-700 transition duration-300"
             >
             <ClipboardList className="mr-2 h-5 w-5" />

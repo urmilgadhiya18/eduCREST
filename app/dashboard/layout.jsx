@@ -122,12 +122,11 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { GraduationCap, BookOpen, CalendarPlus, Users, BarChart, LogOut, Menu, X, Zap, Moon, Sun } from 'lucide-react'
 
-const auth=localStorage.getItem("auth")
-const role=JSON.parse(auth);
+// const auth = JSON.parse(localStorage.getItem('auth'));
 
 const navItems = [
   { name: 'Dashboard', href: '/dashboard', icon: GraduationCap },
-  { name: 'Courses', href: '/dashboard/courses', icon: BookOpen },
+  { name: 'My Courses', href: '/dashboard/mycourses', icon: BookOpen },
   { name: 'Add Course', href: '/dashboard/addcourse', icon: CalendarPlus },
   { name: 'Leaderboard', href: '/dashboard/leaderboard', icon: Users },
   { name: 'Analytics', href: '/analytics', icon: BarChart },
@@ -137,6 +136,14 @@ export default function DashboardLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(false)
   const pathname = usePathname()
+  const [auth, setAuth] = useState(null)
+
+  useEffect(() => {
+    const storedAuth = localStorage.getItem('auth')
+    if (storedAuth) {
+      setAuth(JSON.parse(storedAuth))
+    }
+  }, [])
 
   useEffect(() => {
     setIsSidebarOpen(false)
@@ -175,7 +182,7 @@ export default function DashboardLayout({ children }) {
 
           <nav className="space-y-2">
             {navItems.map((item) => (
-              (role.role=="learner" && item.name=="Add Course")
+              (auth?.role=="learner" && item.name=="Add Course")
               ?""
               :
               <Link
@@ -206,7 +213,7 @@ export default function DashboardLayout({ children }) {
             <span>{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
           </button>
           <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Welcome, {role.name}</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Welcome, {auth?.name}</p>
             <Link
               href="/"
               className="bg-purple-600 text-white text-sm font-semibold py-2 px-4 rounded-full hover:bg-purple-700 transition duration-300 flex items-center justify-center"

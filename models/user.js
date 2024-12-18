@@ -13,7 +13,9 @@ const userSchema = new mongoose.Schema({
         enum: ['learner', 'educator'],
         required: true 
     },
-    img: {type: String}
+    img: {type: String},
+    score: {type: Number, default: 0},
+    mycourses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }],
 })
 
 userSchema.methods.generateAuthToken = function () {
