@@ -12,7 +12,7 @@ const courseSchema = new mongoose.Schema({
   description: { type: String, required: true, trim: true },
   instructor: { type: String, required: true, trim: true },
   duration: { type: String, required: true, trim: true },
-  students: { type: Number, required: true, min: 0 },
+  students: { type: Number, required: true, min: 0, default: 0 },
   image: { type: String, required: true },
   videos: [videoSchema],
 });

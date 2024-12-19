@@ -34,7 +34,7 @@ export default function Signup() {
             setError('Please select a role: Learner or Educator.');
             return;
         }        
-        axios.post(`${process.env.NEXT_PUBLIC_URL}/api/signup`, form)
+        axios.post('/api/signup', form)
         .then(result => {
           console.log(result.data);
           

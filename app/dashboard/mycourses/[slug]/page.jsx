@@ -240,7 +240,7 @@ export default function Course({params}) {
                 {showTranscript ? <ChevronUp className="ml-2 h-4 w-4" /> : <ChevronDown className="ml-2 h-4 w-4" />}
               </button>
               {showTranscript && (
-                <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-md max-h-60 overflow-y-auto">
+                <div className="bg-gray-200 dark:bg-gray-800 p-4 rounded-md max-h-60 overflow-y-auto">
                   <p className="text-gray-800 dark:text-gray-200">{selectedVideo.transcript}</p>
                 </div>
               )}
@@ -277,7 +277,7 @@ export default function Course({params}) {
                 >
                   <div className="flex items-center">
                     <Play className="w-4 h-4 mr-2" />
-                    <span>{video.title}</span>
+                    <span className='line-clamp-2'>{video.title}</span>
                   </div>
                 </button>
               </li>

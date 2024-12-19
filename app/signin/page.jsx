@@ -138,7 +138,7 @@ export default function Signin() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    axios.post(`${process.env.NEXT_PUBLIC_URL}/api/signin`, form)
+    axios.post('api/signin', form)
       .then(result => {
         if(result.data.message === "logged in successfully"){
           const auth=({ name: result.data.name, email: form.email, role: result.data.role, img: result.data.img, auth: true});
