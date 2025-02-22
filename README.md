@@ -49,11 +49,6 @@ EduCREST is an innovative learning platform designed to enhance the learning exp
    http://localhost:3000
    ```
 
+## Contributing
 
-## 👤 Developer
-
-**[Urmil Gadhiya](https://github.com/urmilgadhiya18)**
-
-## 📝 License
-
-This project is licensed under the MIT License.
+If you'd like to contribute, please fork the repository and use a feature branch. Pull requests are warmly welcome.
