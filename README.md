@@ -20,10 +20,9 @@ EduCREST is an innovative learning platform designed to enhance the learning exp
 
 ## 🛠️ Tech Stack
 
-- **Frontend/Backend:** Next.js, Tailwind.css
+- **Frontend/Backend:** Next.js, Tailwind.css, Auth.js
 - **Database:** MongoDB
 - **Cloud Storage:** Cloudinary
-- **Authentication:** Auth.js
 - **Payment Integration:** Stripe Payments
 - **APIs Used:** AI-based Quiz Generation, AI-powered Transcript Generation
 
